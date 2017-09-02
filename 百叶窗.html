@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>百叶窗</title>
+  <style>
+  *{padding: 0; margin: 0;}
+  li{list-style: none;}
+  #ul1,#ul2{width: 300px; height: auto;  float: left; border-top: 1px #000000 solid;   margin: 20px;}
+  li{width: 100%; height: 30px; overflow: hidden; position: relative;
+   border-bottom: 1px #333333 dashed; line-height: 30px;}
+   li div{position: absolute; top: -30px;}
+   li div p{line-height: 30px;}
+  </style>
+  <script type="text/javascript" src="move.js"></script>
+  <script>
+    window.onload=function () {
+       var oul = document.getElementById('ul1');
+       var oul2 = document.getElementById('ul2');
+       toShow (oul);
+      
+          setTimeout(function(){
+              toShow (oul2);
+          },2000)
+
+    function toShow(obj){
+         var aDiv = obj.getElementsByTagName('div');
+         var iNOW =0;
+         var timer = null;
+         var bBtn = true;
+          setInterval(function(){
+             toChange();
+          },4000);
+
+         function toChange(){
+              timer = setInterval(function(){
+                   if (iNOW==aDiv.length) {
+                     clearInterval(timer);
+                     iNOW=0;
+                     bBtn=!bBtn;
+                   } else if(bBtn) {
+                       startMove(aDiv[iNOW],{top:0})
+                      iNOW++
+                 
+                   }else {
+                       startMove(aDiv[iNOW],{top:-30});
+                      iNOW++
+                 
+                   }
+                  
+              
+             })
+
+ 
+          }
+
+       }
+    }
+
+  </script>
+ <head/> 
+	<body>
+    <ul id="ul1">
+      <li>
+           <div>
+             <p>111111</p>
+             <p>22222222</p>
+           </div>
+         </li>
+         <li>
+           <div>
+             <p>33333333</p>
+             <p>444444444</p>
+           </div>
+         </li>
+         <li>
+           <div>
+             <p>55555555</p>
+             <p>66666666</p>
+           </div>
+         </li>
+         <li>
+           <div>
+             <p>77777777777</p>
+             <p>88888888</p>
+           </div>
+         </li>  
+         
+         <li>
+           <div>
+             <p>aaaaaaaaaaaaaaaaaaa</p>
+             <p>bbbbbbbbbbbb</p>
+           </div>
+         </li>  
+         <li>
+           <div>
+             <p>cccccccccccccccc</p>
+             <p>ddddddddddddddddddddddd</p>
+           </div>
+         </li>  
+    </ul>
+
+     <ul id="ul2">
+      <li>
+           <div>
+             <p>111111</p>
+             <p>22222222</p>
+           </div>
+         </li>
+         <li>
+           <div>
+             <p>33333333</p>
+             <p>444444444</p>
+           </div>
+         </li>
+         <li>
+           <div>
+             <p>55555555</p>
+             <p>66666666</p>
+           </div>
+         </li>
+         <li>
+           <div>
+             <p>77777777777</p>
+             <p>88888888</p>
+           </div>
+         </li>  
+         
+         <li>
+           <div>
+             <p>aaaaaaaaaaaaaaaaaaa</p>
+             <p>bbbbbbbbbbbb</p>
+           </div>
+         </li>  
+         <li>
+           <div>
+             <p>cccccccccccccccc</p>
+             <p>ddddddddddddddddddddddd</p>
+           </div>
+         </li>  
+    </ul>
+  </body>
+
+</html>

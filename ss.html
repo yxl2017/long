@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>分页效果</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			li {
+				list-style: none;
+			}
+			
+			#ul1 {
+				width: 600px;
+				height: 250px;
+			}
+			
+			#ul1 li {
+				width: 100px;
+				height: 100px;
+				background: red;
+				float: left;
+				overflow: hidden;
+				margin: 10px;
+			}
+			
+			#div1 a {
+				display: inline-block;
+				margin: 5px;
+				width: 50px;
+				height: 50px;
+			    font-size: 16px;
+			    text-align: center;
+			    line-height: 50px;
+			    font: "微软雅黑";
+			    color: green;
+			    /*font-weight: bold;*/
+		       background-image: url(img/bg2.jpg) ;   
+           text-decoration: none;
+			}
+			
+		</style>
+		<script src="move.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+				var json={};// 定义一个json对象
+	json.title=[];// 增加一个新属性，此属性是数组
+	for(var i=0;i<800;i++)
+	{
+		json.title[i]='效果'+(i+1);
+	}
+	
+				var arr = [];
+				var iNow =9;
+				page({
+					id: "div1",
+					nowNum: 1, //当前显示的页
+					allNum: Math.ceil(json.title.length / 10),
+
+					callBack: function(now, all) {
+						var num = now * 10 < json.title.length ? 10 : json.title.length - (now - 1) * 10;
+						var oUl = document.getElementById('ul1');
+						var aLi = oUl.getElementsByTagName('li');
+
+						if(oUl.innerHTML == '') {
+							for(var i = 0; i < num; i++) {
+								var oLi = document.createElement('li');
+								oLi.innerHTML = json.title[(now - 1) * 10 + i];
+								oUl.appendChild(oLi);
+							}
+							for(var i = 0; i < aLi.length; i++) {
+								arr.push([aLi[i].offsetLeft, aLi[i].offsetTop]);
+							}
+//							alert(arr)
+							for(var i = 0; i < aLi.length; i++) {
+								aLi[i].style.position = 'absolute';
+								aLi[i].style.left=arr[i][0]+'px';
+								aLi[i].style.top=arr[i][1]+'px';
+								aLi[i].style.margin=0;
+							}
+
+						} else {
+							var timer = setInterval(function(){
+								startMove(aLi[iNow],{left :200, top:250,opacity:0})
+								if(iNow==0){
+									clearInterval(timer)
+									iNow=num-1;
+									for(var i=0; i<num; i++){
+										aLi[i].innerHTML=json.title[(now-1)*10+i];
+									}
+									var timer2 = setInterval(function(){
+										startMove(aLi[iNow], {left: arr[iNow][0], top: arr[iNow][1], opacity: 100});
+											if(iNow==0)
+											{
+												clearInterval(timer2);
+												iNow=num-1;
+											}
+											else
+											{
+												iNow--;
+											}
+										},100);
+								}else{
+									iNow--;
+								}
+								
+							},100)
+						}
+						// alert('当前页'+now+',总共页数'+all)
+					}
+
+				})
+			}
+
+			function page(opt) {
+
+				if(!opt.id) {
+					return false
+				};
+
+				var obj = document.getElementById(opt.id);
+
+				var nowNum = opt.nowNum || 1;
+				var allNum = opt.allNum || 5;
+				var callBack = opt.callBack || function() {};
+
+				if(nowNum >= 4 && allNum >= 6) {
+
+					var oA = document.createElement('a');
+					oA.href = '#';
+					oA.innerHTML = 'O';
+					obj.appendChild(oA);
+
+				}
+
+				if(nowNum >= 2) {
+					var oA = document.createElement('a');
+					oA.href = '#' + (nowNum - 1);
+					oA.innerHTML = '《 ';
+					obj.appendChild(oA);
+				}
+
+				if(allNum <= 5) {
+					for(var i = 1; i <= allNum; i++) {
+						var oA = document.createElement('a');
+						oA.href = '#' + i;
+						if(nowNum == i) {
+							oA.innerHTML = i;
+						} else {
+							oA.innerHTML = '[' + i + ']';
+							oA.className = 'menu';
+						}
+						obj.appendChild(oA);
+					}
+				} else {
+
+					for(var i = 1; i <= 5; i++) {
+						var oA = document.createElement('a');
+
+						if(nowNum == 1 || nowNum == 2) {
+
+							oA.href = '#' + i;
+							if(nowNum == i) {
+								oA.innerHTML = i;
+							} else {
+								oA.innerHTML = '[' + i + ']';
+							}
+
+						} else if((allNum - nowNum) == 0 || (allNum - nowNum) == 1) {
+
+							oA.href = '#' + (allNum - 5 + i);
+
+							if((allNum - nowNum) == 0 && i == 5) {
+								oA.innerHTML = (allNum - 5 + i);
+							} else if((allNum - nowNum) == 1 && i == 4) {
+								oA.innerHTML = (allNum - 5 + i);
+							} else {
+								oA.innerHTML = '[' + (allNum - 5 + i) + ']';
+							}
+
+						} else {
+							oA.href = '#' + (nowNum - 3 + i);
+
+							if(i == 3) {
+								oA.innerHTML = (nowNum - 3 + i);
+							} else {
+								oA.innerHTML = '[' + (nowNum - 3 + i) + ']';
+							}
+						}
+						obj.appendChild(oA);
+
+					}
+
+				}
+
+				if((allNum - nowNum) >= 1) {
+					var oA = document.createElement('a');
+					oA.href = '#' + (nowNum + 1);
+					oA.innerHTML = '》';
+					obj.appendChild(oA);
+				}
+
+				if((allNum - nowNum) >= 3 && allNum >= 6) {
+
+					var oA = document.createElement('a');
+					oA.href = '#' + allNum;
+					oA.innerHTML = 'O';
+					obj.appendChild(oA);
+
+				}
+
+				callBack(nowNum, allNum);
+
+				var aA = obj.getElementsByTagName('a');
+
+				for(var i = 0; i < aA.length; i++) {
+					aA[i].onclick = function() {
+
+						var nowNum = parseInt(this.getAttribute('href').substring(1));
+
+						obj.innerHTML = '';
+
+						page({
+
+							id: opt.id,
+							nowNum: nowNum,
+							allNum: allNum,
+							callBack: callBack
+
+						});
+
+						return false;
+
+					};
+				}
+
+			}
+		</script>
+	</head>
+
+	<body>
+           
+		<ul id="ul1"></ul>
+		<div id="div1"></div>
+	</body>
+
+</html>

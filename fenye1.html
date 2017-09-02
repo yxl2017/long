@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#div1{
+			margin-top: 10px;
+		}
+		a{
+			margin: 5px;
+		}
+		.tb-box{
+			position: relative;
+			width: 574px;
+			height: 496px;
+			border: 1px solid #07B7E0;
+			margin: 1px;
+		}
+		.menu{
+			list-style: none;
+			/*position: absolute;*/
+			width: 90px;
+			height: 90px;
+			border: 1px dashed red;
+			float: left;
+			margin: 10px;
+			background: gray;
+		}
+	</style>
+	<title>妙味分页</title>
+	<script type="text/javascript" src="../js/lib.js"></script>
+	<script type="text/javascript" src="../js/page.js"></script>
+</head>
+<body>
+
+	<div class="tb-box">
+		<ul id="ul1"></ul>
+	</div>
+	<div id="div1">
+		 
+	</div>	
+	<script type="text/javascript">
+		window.onload=function  () {
+			var json={
+				title:[
+					"title1", "title2", "title3", "title4", "title5", "title6", "title7", "title8", "title9", "title10", "title11", "title12", "title13", "title14", "title15", "title16", "title17", "title18", "title19", "title20", "title21", "title22", "title23", "title24", "title25", "title26", "title27", "title28", "title29", "title30", "title31", "title32", "title33", "title34", "title35", "title36", "title37", "title38", "title39", "title40", "title41", "title42", "title43", "title44", "title45", "title46", "title47", "title48", "title49", "title50", "title51", "title52", "title53", "title54", "title55", "title56", "title57", "title58", "title59", "title60", "title61", "title62", "title63", "title64", "title65", "title66", "title67", "title68", "title69", "title70", "title71", "title72", "title73", "title74", "title75", "title76", "title77", "title78", "title79", "title80", "title81", "title82", "title83", "title84", "title85", "title86", "title87", "title88", "title89", "title90", "title91", "title92", "title93", "title94", "title95", "title96", "title97", "title98", "title99", "title100", "title101", "title102", "title103", "title104", "title105", "title106", "title107", "title108", "title109", "title110", "title111", "title112", "title113", "title114", "title115", "title116", "title117", "title118", "title119", "title120", "title121", "title122", "title123", "title124", "title125", "title126", "title127", "title128", "title129", "title130", "title131", "title132", "title133", "title134", "title135", "title136", "title137", "title138", "title139", "title140", "title141", "title142", "title143", "title144", "title145", "title146", "title147", "title148", "title149", "title150", "title151", "title152", "title153", "title154", "title155", "title156", "title157", "title158", "title159", "title160", "title161", "title162", "title163", "title164", "title165", "title166", "title167", "title168", "title169", "title170", "title171", "title172", "title173", "title174",
+				]
+			};
+
+			var arr=[];
+			var iNow=9;
+			page({
+				id:"div1",
+				nowNum:8,
+				allNum:Math.ceil(json.title.length/10),
+				callback:function  (now,all) {
+					console.log(now +"..............."+all);
+					var num=now*10<json.title.length?10:json.title.length-(now-1)*10;
+					var oUl=document.getElementById("ul1");
+					var aLi=document.getElementsByTagName("li");
+					if(oUl.innerHTML==""){
+						for (var i = 0; i < num; i++) {
+							var oDiv=document.createElement("li");
+							oDiv.className="menu";
+							oUl.appendChild(oDiv);
+						}
+						for (var i = 0; i < aLi.length; i++) {
+							arr.push([aLi[i].offsetLeft,aLi[i].offsetTop]);
+						}
+						for (var i = 0; i < aLi.length; i++) {
+							aLi[i].style.position="absolute";
+							aLi[i].style.left=arr[i][0]+"px";
+							aLi[i].style.top=arr[i][1]+"px";
+							aLi[i].style.margin=0;
+						}
+					}else{
+						var timer=setInterval(function () {
+							startMove(aLi[iNow],{left:200,top:200,opacity:0});
+							if(iNow==0){
+								clearInterval(timer);
+								iNow=num-1;
+								for (var i = 0; i < num; i++) {
+									aLi[i].innerHTML=json.title[(now-1)*10+i];
+								}
+
+								var timer2=setInterval(function  () {
+									startMove(aLi[iNow],{left:arr[iNow][0],top:arr[iNow][1],opacity:100});	
+									if(iNow==0){
+										clearInterval(timer2);
+										iNow=num-1;
+									}else{
+										iNow--;
+									}
+								},100)
+							}else{
+								iNow--;
+							}
+							
+						},100);
+					}
+				}
+			});
+		};
+		 
+
+	</script>
+</body>
+</html>

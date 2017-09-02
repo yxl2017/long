@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+       select{
+       	margin-left: 5px;
+       }
+	</style>
+	<script>
+ window.onload=function(){
+		    	var s1=new Sel('div1')
+                s1.add('0',["山东省","河北省","甘肃省"]);    
+                s1.add('0-0',["济南","青岛"]);
+                 s1.add('0-0-0',["市中区","历下区","天桥区","鬼影区","历城区","长清区"]);
+                 s1.add('0-0-1',[ "市南区","市北区","四方区","李沧区","城阳区","崂山区"]);
+                 s1.add('0-0-2',[ "市南s区","市北s区","四方s区","李沧s区","城阳s区","崂s山区"]);
+                s1.add('0-1',["石家庄市","廊坊市"]);
+                 s1.add('0-1-0',[ "桥西区","新华区","长安区","裕华区","藁城区","鹿泉区","栾城区"]);
+                 s1.add('0-1-1',[ "安次区","广阳区","三和区","霸州市","香河县","永清县","安固县"]);
+                 s1.add('0-1-2',[ "安次s区","广s阳区","三和s区","霸州s市","香河s县","永清s县","安s固县"]);
+                
+                s1.add('0-2',["庆阳市","天水市"]);
+                 s1.add('0-2-0',[ "桥西s区","新华区","长安s区","裕华区","藁s城区","鹿泉s区","栾城s区"]);
+                 s1.add('0-2-1',[ "安次s区","广阳s区","三和区","霸州s市","香河县","永s清县","安s固县"]);
+                 s1.add('0-2-2',[ "安次s区","广阳s区","三和区","霸州s市","香河县","永s清县","安s固县"]);
+		     s1.init(3);
+		     
+		    }
+           function Sel (id){
+              this.oparent =document.getElementById(id)
+              this.data={};
+              this.aSel=this.oparent.getElementsByTagName('select')
+
+            } 
+           Sel.prototype = {
+           	  init:function(num){
+           	  	var This=this;
+                for (var i = 1; i <= num; i++) {
+                	var oSel = document.createElement('select');
+                	var oPt =document.createElement('option');
+                    oPt.innerHTML='--请选择--';
+                    oSel.appendChild(oPt);
+                    oSel.index=i;
+                   this.oparent.appendChild(oSel);
+                  oSel.onchange=function(){
+                       This.change(this.index)
+
+                    }
+                 }
+                 this.first();
+           	  },
+              add : function(key,value){
+              	this.data[key]=value;
+              },
+              first:function(){
+              	var arr = this.data['0'];
+              	for (var i = 0; i < arr.length; i++) {
+              		var oPt = document.createElement('option');
+
+              		 oPt.innerHTML=arr[i];
+              		this.aSel[0].appendChild(oPt)
+
+              	}
+              },
+              change : function( iNow ){
+              	var str = '0';
+              	for(var i=0; i<iNow; i++){
+              		
+              		str+='-'+ (this.aSel[i].selectedIndex-1)
+              	}
+              	if (this.data[str]) {
+                 var arr =this.data[str];
+                 this.aSel[iNow].options.length=1;
+                 for (var i = 0; i < arr.length; i++) {
+                 	var oPt = document.createElement('option');
+                 	 oPt.innerHTML = arr[i];
+                 	 this.aSel[iNow].appendChild(oPt)
+                 }
+
+                 this.aSel[iNow].options[1].selected=true;
+                 iNow++;
+
+                 if (iNow<this.aSel.length) {
+                 	this.change(iNow);
+                 }
+              	} else {
+              		if (iNow<this.aSel.length) {
+                        this.aSel[iNow].options.length=1;
+              		}
+                
+                
+              	}
+              }
+           };
+                
+	</script>
+          
+</head>
+<body>
+	<div id="div1">
+          单位地址：
+	</div>
+</body>
+</html>

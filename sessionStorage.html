@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>商品库录入系统</title>
+  </head>
+  <body>
+    <div id="iputDiv">
+        商品名称：<input type="text" id="goodsName" />
+        <input type="button" id="inputButton" value="录入" />
+        <hr/>
+        <input type="button" id="showButton" value="显示商品库中所有商品的名称" />
+    </div> 
+    <div id="resultDiv"></div> 
+	<script type="text/javascript">
+		var i=1;
+		var inputButton=document.getElementById("inputButton");
+		var showButton=document.getElementById("showButton");
+		//向sessionStorage录入商品名称
+		inputButton.onclick=function(){
+			var goodsName=document.getElementById("goodsName");
+			if(goodsName.value==""){
+				alert("商品名称不能为空");
+				return;	
+			}
+			sessionStorage.setItem("goods"+i,goodsName.value);
+			i++;
+			goodsName.value="";
+		};
+		//将sessionStorage中的商品名称以列表形式显示
+		showButton.onclick=function(){
+			var result="<table border='1'>";
+			result=result+"<tr><td>商品名称</td></tr>";
+			if(sessionStorage.length==0){
+				result=result+"<tr><td>暂无商品</td></tr>";
+			}else{
+				for(var j=0;j<sessionStorage.length;j++){
+					var key=sessionStorage.key(j);
+					var currentName=sessionStorage.getItem(key);
+					result=result+"<tr><td>"+currentName+"</td></tr>";
+				}
+			}			
+			result=result+"</table>";			
+			var resultDiv=document.getElementById("resultDiv");
+			resultDiv.innerHTML=result;
+		};
+	</script>
+  </body>
+</html>
